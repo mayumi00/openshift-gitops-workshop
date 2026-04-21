@@ -63,15 +63,15 @@ image::git-clone0.png[GitCrone0, 600]
 
 移行元のレポジトリを選択する画面が表示されるので、`GitHub` をクリックします。
 
-image::git-clone1.png[GitCrone1, 600]
+image::git-clone1.png[GitClone1, 600]
 
 `移行元/クローンするURL` に `https://github.com/OpenShiftDemos/openshift-gitops-workshop` を入力し、`リポジトリを移行` ボタンをクリックします。
 
-image::git-clone2.png[GitCrone2, 600]
+image::git-clone2.png[GitClone2, 600]
 
 しばらく待つと、自分自身のレポジトリにクローンされたことを確認できます。
 
-image::git-clone3.png[GitCrone3, 600]
+image::git-clone3.png[GitClone3, 600]
 
 
 === アプリケーションマニフェストの確認
@@ -81,7 +81,7 @@ image::git-clone3.png[GitCrone3, 600]
 
 A *Deployment*:
 
-image::bgd-depolymentyaml.png[bgd-depolymentyaml, 600]
+image::bgd-bgd-deploymentyaml.png[bgd-depolymentyaml, 600]
 
 [source,yaml,subs="+macros,attributes+"]
 ----
@@ -142,21 +142,12 @@ spec:
 <1> destination server、Argo CD が実行されているクラスターの API エンドポイントです。
 この場合、クラスターのローカルで解決可能な URL を使用します。
 <2> ここでは、Argo CD の `default` プロジェクト (`.spec.project`) にアプリケーションをインストールします。
-
 [NOTE]
 Argo CD の `Project` の概念は OpenShift とは異なります。ここでは、アプリケーションを Argo CD の `default` プロジェクト (`.spec.project`) にインストールします。
-
 OpenShift のデフォルトプロジェクト *ではありません* 。
 
 <3> マニフェストリポジトリ、およびその中のYAMLファイルが格納されているパスです。
-
-<4> The `syncPolicy` is set to `automated`. It will automatically prune
-  resources that have been removed from the Git repo, but will not automatically
-  correct resources that deviate from the definition stored in the repo, i.e
-  manual changes made using `oc` or `kubectl` will not be "healed".
-  `syncPolicy` は `automated` に設定されています。これにより、
-
-Git リポジトリから削除されたリソースは自動的に削除されますが、リポジトリに保存されている定義から逸脱したリソースは自動的に修正されません。つまり、 `oc` または `kubectl` を使用して手動で行われた変更は *修復* されません。
+<4> `syncPolicy` は `automated` に設定されています。これにより、Git リポジトリから削除されたリソースは自動的に削除されますが、リポジトリに保存されている定義から逸脱したリソースは自動的に修正されません。つまり、 `oc` または `kubectl` を使用して手動で行われた変更は *修復* されません。
 
 
 Giteaの編集機能を利用してサンプルコードを少し変更することでアプリケーションを作成します。
