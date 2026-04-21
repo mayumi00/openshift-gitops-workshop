@@ -1,39 +1,31 @@
-= Getting Started
+= はじめに
 include::_attributes.adoc[]
 :profile: gitops
 
-An Argo CD instance dedicated for you has been deployed into the OpenShift
-Project `{user}-argocd`. This is one of the benefits of the
-Operator-based mechanism that OpenShift uses: it's easy for users to deploy
-software and solutions.
+お客様専用のArgo CDインスタンスがOpenShiftプロジェクト `{user}-argocd` にデプロイされました。これは、OpenShiftが採用しているオペレーターベースのメカニズムの利点の1つです。ユーザーはソフトウェアやソリューションを簡単にデプロイできます。
 
 [#review-argocd]
-== Review the Argo CD Deployment
+== Argo CD デプロイメントの確認
 
-In the OpenShift web console click the _Workloads_ menu in the left navigation to
-open it up and then click the _Topology_ link.  Make sure that the
-`{user}-argocd` Project is selected at the top. You will see the Argo CD
-deployment in the topology view:
+OpenShift Web コンソールで、左側のナビゲーションにある _Workloads_ メニューをクリックして開き、次に _トポロジー_ リンクをクリックします。上部で `{user}-argocd` プロジェクトが選択されていることを確認してください。トポロジビューに Argo CD デプロイメントが表示されます。
 
 image::argocd-topology.png[]
 
 [#connect-argocd]
-== Connecting to Argo CD
+== Argo CDへの接続
 
-While Argo CD generates a default `admin` user and a random password when first
-deployed you can also configure Argo CD to use the OpenShift authentication.
-You can connect to Argo CD using this user account via the CLI or web
-console.  In this workshop, we will only use the Argo CD web console.
+Argo CDは初回デプロイ時にデフォルトの `admin` ユーザーとランダムなパスワードを生成しますが、OpenShift認証を使用するように設定することもできます。
 
-There are a few ways to find the URL for your Argo CD instance. In the _Topology_ view of your Project, any Routes/Ingresses associated with
-services will have a little pop-out icon:
+このユーザーアカウントを使用して、CLIまたはWebコンソール経由でArgo CDに接続できます。
+このワークショップでは、Argo CD Webコンソールのみを使用します。
+
+Argo CDインスタンスのURLを見つける方法はいくつかあります。プロジェクトの _トポロジー_ ビューでは、サービスに関連付けられているRoutes/Ingressesに小さなポップアップアイコンが表示されます。
 
 image::argocd-topology-link.png[]
 
-You can find all of the Routes by clicking the _Project_ link on the left, and
-then clicking _Route_ on the subsequent page.
+左側の _プロジェクト_ リンクをクリックし、次のページで _Route_ をクリックすると、すべてのルートが表示されます。
 
-Also, you can get the Argo CD Route using the `oc` CLI:
+また、`oc` CLI を使用して Argo CD ルートを取得することもできます。
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
@@ -41,28 +33,23 @@ Also, you can get the Argo CD Route using the `oc` CLI:
 oc get route -n {user}-argocd {user}-argo-server -o jsonpath='{.spec.host}{"\n"}'
 ----
 
-However you decide to access the Argo CD console, log in with the same username
-and password that you used to login in with OpenShift.
+Argo CDコンソールへのアクセス方法は問いません。OpenShiftへのログインに使用したユーザー名とパスワードと同じものを使用してください。
 
 image::argo-cd-login.png[ArgoCDLogin, 600]
 
-After you enter your credentials you will see the following prompting you to authorize access,
-click the "Allow selected permissions" button.
+認証情報を入力すると、アクセス権限を承認するよう求めるメッセージが表示されます。 "Allow selected permissions" ボタンをクリックしてください。
 
 image::argo-cd-allow-access.png[ArgoCDAuthorize, 600]
 
-Once you've logged in, you should see the following page. This is the Argo CD
-Web UI.
+ログインすると、次のページが表示されます。これがArgo CDのWebユーザーインターフェースです。
 
 image::argocd-login2.png[ArgoCDLogin2, 600]
 
 [#deploy-sample-application]
-== Deploy a Sample Application
+== サンプルアプリケーションのデプロイ
 
-As GitOps implies some relationship to Git, we will need to get manifests from a
-repository somewhere. You will be using the repository that contains this
-workshop and its documentation as the source of the manifests that define the
-application state:
+GitOpsはGitとの関連性を前提としているため、マニフェストをどこかのリポジトリから取得する必要があります。
+このワークショップとそのドキュメントを含むリポジトリを、アプリケーションの状態を定義するマニフェストのソースとして使用します。
 
 https://github.com/OpenShiftDemos/openshift-gitops-workshop[https://github.com/OpenShiftDemos/openshift-gitops-workshop,window="_blank']
 

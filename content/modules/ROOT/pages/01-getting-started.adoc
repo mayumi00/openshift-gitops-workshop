@@ -1,20 +1,16 @@
-= Getting Started
+= はじめに
 include::_attributes.adoc[]
 
-あああ
-
 [#cluster-login]
-== OpenShift cluster login
 
-== OpenShift Cluster Login
+== OpenShift クラスターへのログイン
 
-The first thing to do is log in to your OpenShift cluster with the following
-information:
+まず最初に、以下の情報を使用して OpenShift クラスターにログインしてください。
 
-*OpenShift Console*
+*OpenShift コンソール*
 link:{console_url}[{console_url},window='_blank']
 
-*Username*
+*ユーザー名*
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
@@ -22,7 +18,7 @@ link:{console_url}[{console_url},window='_blank']
 {user}
 ----
 
-*Password*
+*パスワード*
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
@@ -30,18 +26,15 @@ link:{console_url}[{console_url},window='_blank']
 {password}
 ----
 
-Clicking the link above for the OpenShift Console will take you to the OpenShift
-login screen where you can login using the provided username and password.
+上記の OpenShift コンソールへのリンクをクリックすると、OpenShift のログイン画面が表示されます。
+ログイン画面では、入力したユーザー名とパスワードを使用してログインできます。
 
 image::openshift-login.png[]
 
 [#open-web-terminal]
-== Workshop Web Terminal
+== ワークショップWebターミナル
 
-On the right side of your screen is a web terminal which includes many of the
-necessary command-line tools you need to interact with. By default the terminal
-is logged in with a service account with limited permissions, execute the following
-command to login as {user}.
+画面右側には、操作に必要な多くのコマンドラインツールを含むWebターミナルが表示されます。デフォルトでは、ターミナルは権限が制限されたサービスアカウントでログインされています。`{user}` としてログインするには、以下のコマンドを実行してください。
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
@@ -49,10 +42,9 @@ command to login as {user}.
 {login_command}
 ----
 
-When you login you will see a prompt about using an insecure connection as the Kubernetes API
-in this workshop is using a default certificate, type `y` to accept and the login will continue.
+ログイン時に、Kubernetes APIがこのワークショップでデフォルトの証明書を使用しているため、安全でない接続を使用することに関するプロンプトが表示されます。`y` と入力して承認すると、ログインが続行されます。
 
-*Once completed you should see the following in the terminal:*
+*ログインが完了すると、ターミナルに以下の内容が表示されます。*
 
 [.console-output]
 [source,bash,subs="attributes+,+macros"]
@@ -80,7 +72,7 @@ Welcome! See 'oc help' to get started.
 
 [TIP]
 ====
-In order to copy and paste content into the terminal, you can use
-the secondary (typically right click) menus to do so. You can also
-use the keyboard to paste content with the shortcut &lt;ctrl&gt;&lt;shift&gt;&lt;v&gt;.
+ターミナルにコンテンツをコピー＆ペーストするには、以下の方法があります。
+セカンダリメニュー（通常は右クリックメニュー）を使用するか、
+キーボードショートカットの &lt;ctrl&gt;&lt;shift&gt;&lt;v&gt; を使って貼り付けることもできます。
 ====
