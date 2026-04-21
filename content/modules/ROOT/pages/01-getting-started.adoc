@@ -1,6 +1,8 @@
 = Getting Started
 include::_attributes.adoc[]
 
+あああ
+
 [#cluster-login]
 == OpenShift cluster login
 
