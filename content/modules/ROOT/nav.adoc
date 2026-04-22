@@ -1,11 +1,13 @@
-* xref:01-getting-started.adoc[1. Getting Started]
-** xref:01-getting-started.adoc#cluster-login[Cluster Login]
-** xref:01-getting-started.adoc#open-web-terminal[Open the Web Terminal]
+* xref:01-getting-started.adoc[1. はじめに]
+** xref:01-getting-started.adoc#cluster-login[OpenShift クラスターへのログイン]
+** xref:01-getting-started.adoc#open-web-terminal[ワークショップWebターミナル]
 
-* xref:02-gitops-basics.adoc[2. GitOps Basics]
-** xref:02-gitops-basics.adoc#review-argocd[Review Argo CD Deployment]
-** xref:02-gitops-basics.adoc#connect-argocd[Connecting to Argo CD]
-** xref:02-gitops-basics.adoc#deploy-sample-application[Deploy a Sample Application]
+* xref:02-gitops-basics.adoc[2. GitOps基礎]
+** xref:02-gitops-basics.adoc#review-argocd[Argo CD デプロイメントの確認]
+** xref:02-gitops-basics.adoc#connect-argocd[Argo CDへの接続]
+** xref:02-gitops-basics.adoc#deploy-sample-application[サンプルアプリケーションのデプロイ]
+
+---
 
 * xref:03-kustomize.adoc[3. Work with Kustomize]
 ** xref:03-kustomize.adoc#exploring_kustomize[Exploring the Kustomize]
