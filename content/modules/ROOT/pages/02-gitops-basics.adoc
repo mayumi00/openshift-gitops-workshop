@@ -81,7 +81,7 @@ image::git-clone3.png[GitClone3, 600]
 
 A *Deployment*:
 
-image::bgd-bgd-deploymentyaml.png[bgd-depolymentyaml, 600]
+image::bgd-deploymentyaml.png[bgd-depolymentyaml, 600]
 
 [source,yaml,subs="+macros,attributes+"]
 ----
@@ -102,6 +102,11 @@ A *Route*:
 
 image::bgd-routeyaml.png[bgd-routeyaml, 600]
 
+
+[source,yaml,subs="+macros,attributes+"]
+----
+include::ROOT:example$bgd/bgd-route.yaml[]
+----
 
 === アプリケーションのデプロイ
 
@@ -139,7 +144,7 @@ spec:
       selfHeal: false
 ----
 
-<1> destination server、Argo CD が実行されているクラスターの API エンドポイントです。
+<1> destination serverはArgo CD が実行されているクラスターの API エンドポイントです。
 この場合、クラスターのローカルで解決可能な URL を使用します。
 <2> ここでは、Argo CD の `default` プロジェクト (`.spec.project`) にアプリケーションをインストールします。
 [NOTE]
@@ -156,7 +161,7 @@ Giteaの編集機能を利用してサンプルコードを少し変更するこ
 
 image::git-edit01.png[git-edit01, 600]
 
-OpenShiftのネームスペースに `{user}-bgd` を指定します。repoURLとして `https://gitea.apps.cluster-8krr9.dynamic.redhatworkshops.io/user2/openshift-gitops-workshop` を指定します。その際、この例の `user2` の部分は、使用しているGiteaのユーザ名にしてください。
+OpenShiftのネームスペースに `{user}-bgd` を指定します。repoURLとして `https://gitea.apps.cluster-8krr9.dynamic.redhatworkshops.io/user2/openshift-gitops-workshop` を指定します。その際、GiteaのURLの `user2` の部分は、使用しているGiteaのユーザ名にしてください。
 
 image::git-edit02.png[git-edit02, 600]
 
@@ -173,17 +178,13 @@ image::git-edit04.png[git-edit04, 600]
 image::git-edit05.png[git-edit05, 600]
 
 
-`oc apply` コマンドを実行し、OpenShift環境にデプロイします。その際、この例の `user2` の部分は、使用しているGiteaのユーザ名にしてください。
+`oc apply` コマンドを実行し、OpenShift環境にデプロイします。その際、GiteaのURLの `user2` の部分は、使用しているGiteaのユーザ名にしてください。
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
 oc apply -n {user}-argocd -f https://gitea.apps.cluster-8krr9.dynamic.redhatworkshops.io/user2/openshift-gitops-workshop/raw/branch/main/content/modules/ROOT/examples/bgd-app.yaml
 ----
-
-
-The newly created Application appears as a tile with the title `bgd-app` in the
-Argo CD UI.
 
 新しく作成されたアプリケーションは、Argo CDのユーザーインターフェースに `bgd-app` というタイトルのタイルとして表示されます。
 
