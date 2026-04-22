@@ -102,7 +102,6 @@ A *Route*:
 
 image::bgd-routeyaml.png[bgd-routeyaml, 600]
 
-
 [source,yaml,subs="+macros,attributes+"]
 ----
 include::ROOT:example$bgd/bgd-route.yaml[]
@@ -119,7 +118,7 @@ link:https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/
 
 このアプリケーションのデプロイに使用された `Application` マニフェストを確認してみましょう。/content/modules/ROOT/examples/bgd-app.yamlです。そして、これを少し詳しく見ていきましょう。
 
-image::bgd-applicationyaml.png[bgd-applicationyaml, 600]
+image::bdg-applicationyaml.png[bgd-applicationyaml, 600]
 
 
 .link:https://github.com/OpenShiftDemos/openshift-gitops-workshop/blob/{gitops_revision}/content/modules/ROOT/examples/bgd-app.yaml[bgd-app.yaml,window="_blank"]
@@ -223,9 +222,6 @@ NAME                           HOST/PORT                                        
 route.route.openshift.io/bgd   bgd-{user}-bgd.apps.cluster-7pjzx.7pjzx.sandbox141.opentlc.com          bgd        8080                 None
 ----
 
-
-**追加課題:** ReplicaSet を使用する理由をご存知ですか？
-
 デプロイメントで新しいポッドのロールアウトが完了するまでお待ちください。
 
 [.console-input]
@@ -254,20 +250,44 @@ oc get route bgd -n {user}-bgd -o jsonpath='{"https://"}{.spec.host}{"\n"}'
 
 image::bgd.png[SampleApp]
 
-=== Addressing Configuration Drift
+=== アプリケーションの変更
 
-Let's introduce a change in the application environment! Patch the live
-Deployment manifest to change the color of the bubbles in the application from
-blue to green:
+Git上でアプリケーションに変更を加えて、ArgoCDがどのように動作するか確認してみましょう。
+
+Giteaで、`bgd-deployment.yaml` を指定して、右上の鉛筆マークにカーソルを合わせると `ファイルを編集` と表示されるのでクリックすると編集画面に遷移します。
+
+image::change-app1.png[change-app1]
+
+/spec/template/spec/containers以下に環境変数としてCOLORを指定する行があります。オリジナルは `blue` となっているので、この部分を `green` に変更します。
+
+image::change-app2.png[change-app2]
+
+`変更をプレビュー` ボタンをクリックし、変更内容を確認した上で、`変更をコミット` ボタンをクリックします。
+
+image::change-app3.png[change-app3]
+
+Argo CDのユーザーインターフェースを見てみましょう。ArgoCDの Automated Sync（自動同期）で、Gitの変更が反映されるまでの時間はデフォルトで**最大3分（180秒）**です。約3分待つと、新しいReplicaSetが作成され、新しいPodが作成される状態を見ることができます。
+
+image::change-argocd1.png[change-argocd1]
+
+再びアプリケーションを見てみましょう。アプリケーションのURLにアクセスすると、先ほど環境変数を `green` に変更した内容が反映されて、バブルの色が緑になっていることを確認できます。
+
+このように、Gitの情報を真として、クラスタが構成されることがわかりました。
+
+image::change-argocd2.png[change-argocd2]
+
+=== 設定のdriftへの対処
+
+本番環境に変更を加えます。本番環境のデプロイメントマニフェストにパッチを適用して、アプリケーション内のバブルの色を緑から赤に変更します。
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 
 ----
-oc -n {user}-bgd patch deploy/bgd --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env/0/value", "value":"green"}]'
+oc -n {user}-bgd patch deploy/bgd --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env/0/value", "value":"red"}]'
 ----
 
-Wait for the rollout of the new pods to happen in the deployment:
+デプロイメントで新しいポッドのロールアウトが行われるまでお待ちください。
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
@@ -275,33 +295,28 @@ Wait for the rollout of the new pods to happen in the deployment:
 oc rollout status deploy/bgd -n {user}-bgd
 ----
 
-Refresh the browser tab where your application is running. You should see green
-bubbles.
+アプリケーションが実行されているブラウザタブを更新してください。赤色のバブルが表示されるはずです。
 
-image::bgd-green.png[BDG Green]
+image::bgd-red.png[BDG red]
 
-Looking over at your Argo CD Web UI, you can see that Argo detects your
-application as "Out of Sync".
+Argo CDのWeb UIを確認すると、Argoがアプリケーションを "Out of Sync"と検出していることがわかります。これはGit上の設定と本番環境の際が発生したことを示しています。
 
-image::out-of-sync.png[Out of Sync]
+image::sync1.png[Out of Sync]
 
-You can sync your app via the Argo CD by:
+Argo CD を介してアプリを同期するには、以下の方法があります。
 
-* First clicking `SYNC`
-* Then clicking `SYNCHRONIZE`
+* 最初に左上部にある `SYNC` ボタンをクリックします。
+* 次に、右側に表示される `SYNCHRONIZE` ボタンをクリックします。
 
-After the sync process is done, the Argo CD UI should mark the application as in
-sync.
+同期処理が完了すると、Argo CDのユーザーインターフェースはアプリケーションが同期済みであることを示します。
 
-image::fullysynced.png[Fully Synced]
+image::sync2.png[Fully Synced]
 
-Reload the page on the tab where the application is running. The bubbles should
-have returned to their original blue color.
+アプリケーションが実行されているタブのページを再読み込みしてください。バブルの色が元の緑色に戻っているはずです。
 
-image::bgd.png[BDG App]
+image::change-argocd2.png[change-argocd2]
 
-You can set up Argo CD to automatically correct drift by setting the `selfHeal`
-property of the `Application` manifest to do so. Using the example from link:#_deploy_the_application[above]:
+上記の例では、手動で同期を行いましたが、自動で行うことも可能です。Argo CD でdriftを自動的に修正するには、`Application` マニフェストの `selfHeal` プロパティを設定します。link:#_deploy_the_application[above]: #_deploy_the_application の例を参照してください。
 
 [.console-input]
 [source,yaml,subs="attributes+,+macros"]
@@ -315,7 +330,7 @@ spec:
       selfHeal: true # Set this to true
 ----
 
-Or, as in our case, after the fact by running the following command:
+あるいは、今回のように、事後に以下のコマンドを実行することによっても可能です。
 
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
